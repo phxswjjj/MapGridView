@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace MyUI
 {
     public class MapGridView : DataGridView
     {
+        const int DATA_COLUMN_COUNT = 100;
+
         Task ResizeTask = null;
         Task PaintTask = null;
         bool AllowPaint = true;
@@ -47,16 +50,30 @@ namespace MyUI
 
         protected override void InitLayout()
         {
-            var innerWidth = this.Width;
-            for (var i = 0; i < this.DefaultDataColumnCount; i++)
+            var defaultFont = new Font("Times New Roman", 10f, GraphicsUnit.Pixel);
+            var defaultCellStyle = new DataGridViewCellStyle()
+            {
+                Font = defaultFont,
+                Alignment = DataGridViewContentAlignment.MiddleCenter,
+            };
+            var textSize = TextRenderer.MeasureText("0", defaultFont);
+
+            for (var i = 0; i < DATA_COLUMN_COUNT; i++)
             {
                 var headerText = ((i + 1) % 10).ToString();
-                this.Columns.Add(new DataGridViewTextBoxColumn()
+
+                var col = new DataGridViewTextBoxColumn()
                 {
                     HeaderText = headerText,
                     AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                    MinimumWidth = textSize.Width,
+                    DividerWidth = 0,
                     ReadOnly = true,
-                });
+                    DefaultCellStyle = defaultCellStyle,
+                    SortMode = DataGridViewColumnSortMode.NotSortable,
+                };
+                col.HeaderCell.Style = defaultCellStyle;
+                this.Columns.Add(col);
             }
             base.InitLayout();
 
@@ -106,16 +123,6 @@ namespace MyUI
             AllowPaint = false;
             AllowPaintTime = DateTime.Now.AddMilliseconds(200);
             base.OnScroll(e);
-        }
-
-
-        private int _DefaultDataColumnCount = 100;
-
-        [DefaultValue(100)]
-        public int DefaultDataColumnCount
-        {
-            get { return _DefaultDataColumnCount; }
-            set { _DefaultDataColumnCount = value; }
         }
     }
 }

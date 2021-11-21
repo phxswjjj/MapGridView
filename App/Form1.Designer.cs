@@ -35,9 +35,14 @@ namespace App
             // 
             // mapGridView1
             // 
+            this.mapGridView1.AllowUserToAddRows = false;
+            this.mapGridView1.AllowUserToDeleteRows = false;
+            this.mapGridView1.AllowUserToResizeColumns = false;
+            this.mapGridView1.AllowUserToResizeRows = false;
             this.mapGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.mapGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.mapGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.mapGridView1.Location = new System.Drawing.Point(12, 12);
             this.mapGridView1.Name = "mapGridView1";
