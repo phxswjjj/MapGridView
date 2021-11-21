@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,17 +35,27 @@ namespace App
             }
             while (list.Count > 0)
             {
-                var row = (DataGridViewRow)mapGridView1.RowTemplate.Clone();
+                var row = (MapGridViewRow)mapGridView1.RowTemplate.Clone();
                 mapGridView1.Rows.Add(row);
 
-                var lastRowIndex = mapGridView1.Rows.GetLastRow(DataGridViewElementStates.Visible);
-                row = mapGridView1.Rows[lastRowIndex];
-                foreach (DataGridViewCell cell in row.Cells)
+                var lastRowIndex = mapGridView1.Rows.Count - 1;
+                row = (MapGridViewRow)mapGridView1.Rows[lastRowIndex];
+                foreach (DataGridViewCell cell in row.DataCells)
                 {
                     if (list.Count == 0)
                         break;
                     var data = list.Dequeue();
                     cell.Value = data;
+                }
+            }
+
+            if (mapGridView1.RowTailersVisible)
+            {
+                foreach (MapGridViewRow row in mapGridView1.Rows)
+                {
+                    var cells = row.DataCells;
+                    var emptyCount = cells.Count(c => c.Value is null || string.IsNullOrWhiteSpace(c.Value.ToString()));
+                    row.TailerCell.Value = emptyCount;
                 }
             }
         }

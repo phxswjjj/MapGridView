@@ -46,7 +46,7 @@ namespace App
             this.mapGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.mapGridView1.Location = new System.Drawing.Point(12, 12);
             this.mapGridView1.Name = "mapGridView1";
-            this.mapGridView1.RowHeadersVisible = false;
+            this.mapGridView1.RowTailersVisible = true;
             this.mapGridView1.RowTemplate.Height = 24;
             this.mapGridView1.Size = new System.Drawing.Size(1175, 651);
             this.mapGridView1.TabIndex = 0;

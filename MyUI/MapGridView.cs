@@ -22,13 +22,13 @@ namespace MyUI
         public MapGridView()
         {
             //reset
-            this.RowHeadersVisible = false;
             DoubleBuffered = true;
             this.AllowUserToAddRows = false;
             this.AllowUserToDeleteRows = false;
             this.AllowUserToResizeRows = false;
             this.AllowUserToResizeColumns = false;
             this.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            this.RowTemplate = new MapGridViewRow();
 
             this.PaintTask = Task.Delay(1000).ContinueWith(t =>
             {
@@ -75,6 +75,18 @@ namespace MyUI
                 col.HeaderCell.Style = defaultCellStyle;
                 this.Columns.Add(col);
             }
+
+            if (this.RowTailersVisible)
+            {
+                var tailerTextSize = TextRenderer.MeasureText("0000", defaultFont);
+                var tailerCol = new MapGridViewTailerColumn()
+                {
+                    Width = tailerTextSize.Width,
+                    DefaultCellStyle = defaultCellStyle,
+                };
+                this.Columns.Add(tailerCol);
+            }
+
             base.InitLayout();
 
             Initialized = true;
@@ -101,6 +113,8 @@ namespace MyUI
             {
                 foreach (DataGridViewColumn col in this.Columns)
                 {
+                    if (col is MapGridViewTailerColumn)
+                        continue;
                     col.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                     col.Width = 1;
                     col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -108,14 +122,11 @@ namespace MyUI
             }
         }
 
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (AllowPaint)
-            {
                 base.OnPaint(e);
-                Console.WriteLine("Paint");
-                Console.WriteLine(DateTime.Now);
-            }
         }
 
         protected override void OnScroll(ScrollEventArgs e)
@@ -124,5 +135,8 @@ namespace MyUI
             AllowPaintTime = DateTime.Now.AddMilliseconds(200);
             base.OnScroll(e);
         }
+
+        [DefaultValue(false)]
+        public bool RowTailersVisible { get; set; }
     }
 }
