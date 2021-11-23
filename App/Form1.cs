@@ -27,10 +27,11 @@ namespace App
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            var rnd = new Random();
             var list = new Queue<string>();
-            for (var i = 0; i < 100000; i++)
+            for (var i = 0; i < 500000; i++)
             {
-                var c = (char)(65 + i);
+                var c = "---#"[rnd.Next(0, 4)];
                 list.Enqueue(c.ToString());
             }
             while (list.Count > 0)
@@ -49,13 +50,24 @@ namespace App
                 }
             }
 
+            //First Piece Number
+            if (mapGridView1.RowHeadersVisible)
+            {
+                foreach (MapGridViewRow row in mapGridView1.Rows)
+                {
+                    var sn = row.Index * 100 + 1;
+                    row.HeaderCell.Value = sn.ToString("000000");
+                }
+            }
+
+            //NG count
             if (mapGridView1.RowTailersVisible)
             {
                 foreach (MapGridViewRow row in mapGridView1.Rows)
                 {
                     var cells = row.DataCells;
-                    var emptyCount = cells.Count(c => c.Value is null || string.IsNullOrWhiteSpace(c.Value.ToString()));
-                    row.TailerCell.Value = emptyCount;
+                    var ngCount = cells.Count(c => (string)c.Value == "#");
+                    row.TailerCell.Value = ngCount;
                 }
             }
         }

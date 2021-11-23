@@ -50,7 +50,7 @@ namespace MyUI
 
         protected override void InitLayout()
         {
-            var defaultFont = new Font("Times New Roman", 10f, GraphicsUnit.Pixel);
+            var defaultFont = new Font("Times New Roman", 10f, FontStyle.Bold, GraphicsUnit.Pixel);
             var defaultCellStyle = new DataGridViewCellStyle()
             {
                 Font = defaultFont,
@@ -76,9 +76,16 @@ namespace MyUI
                 this.Columns.Add(col);
             }
 
+            if (this.RowHeadersVisible)
+            {
+                var headerTextSize = TextRenderer.MeasureText("  000000", defaultFont);
+                this.RowHeadersWidth = headerTextSize.Width + 40;
+                this.RowHeadersDefaultCellStyle = defaultCellStyle;
+            }
+
             if (this.RowTailersVisible)
             {
-                var tailerTextSize = TextRenderer.MeasureText("0000", defaultFont);
+                var tailerTextSize = TextRenderer.MeasureText(" 00", defaultFont);
                 var tailerCol = new MapGridViewTailerColumn()
                 {
                     Width = tailerTextSize.Width,
