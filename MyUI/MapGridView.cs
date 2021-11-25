@@ -14,6 +14,7 @@ namespace MyUI
         const int DATA_COLUMN_COUNT = 100;
 
         Task ResizeTask = null;
+
         Task PaintTask = null;
         bool AllowPaint = true;
         DateTime AllowPaintTime = DateTime.Now;
@@ -134,6 +135,26 @@ namespace MyUI
         {
             if (AllowPaint)
                 base.OnPaint(e);
+            else
+            {
+                var row = this.FirstDisplayedCell.OwningRow;
+                var headerValue = row.HeaderCell.Value as string;
+
+                var headerTextSize = TextRenderer.MeasureText(headerValue, DefaultFont);
+                headerTextSize.Width += 10;
+                headerTextSize.Height += 6;
+                var pos = this.PointToClient(MousePosition);
+                pos.Offset(-headerTextSize.Width - 10, 0);
+                var rect = new Rectangle(pos, headerTextSize);
+                var fontPos = pos;
+                fontPos.Offset(8, 3);
+
+                var g = e.Graphics;
+                g.FillRectangle(Brushes.LightGoldenrodYellow, rect);
+                g.DrawString(headerValue, DefaultFont, Brushes.Black, fontPos);
+
+                Invalidate();
+            }
         }
 
         protected override void OnScroll(ScrollEventArgs e)
